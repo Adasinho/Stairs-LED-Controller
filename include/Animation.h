@@ -17,6 +17,7 @@ public:
     bool introBetweenFrame(uint8_t color);
     bool outroFromAToBFrame();
     bool outroFromBToAFrame();
+    bool outro();
     void resetIteratorA();
     void resetIteratorB();
 

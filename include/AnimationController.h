@@ -1,7 +1,8 @@
 #include "Adafruit_NeoPixel.h"
 #include "Animation.h"
-#include "MotionSensorController.h"
+#include "Control.h"
 
+template <typename ControlerType>
 class AnimationController {
     public:
     AnimationController(int numPixels, int pinNumberLEDStrip, int sensorAPin, int sensorBPin, int delayValue);
@@ -13,7 +14,7 @@ class AnimationController {
 
     Adafruit_NeoPixel *pixels;
     Animation *animation;
-    MotionSensorController *motionSensorController;
+    ControlerType *controller;
     uint8_t delayValue;
     unsigned long lastTime;
 };

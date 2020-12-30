@@ -1,24 +1,24 @@
 //
 // Created by adirm on 02.04.2020.
 //
-
+#pragma once
 #ifndef STAIRS_LEDS_MOTIONSENSOR_H
 #define STAIRS_LEDS_MOTIONSENSOR_H
 
 #include "Collections.h"
 
-class MotionSensor {
+class StateController {
 
 public:
-    MotionSensor();
+    StateController();
     void update(bool state);
     bool checkIfTriggered();
     bool checkIfFreed();
 
-private:
-    bool motionStatus;
-    SensorState state;
+protected:
+    bool triggered;
+    ControllerState state;
 };
 
 
-#endif //STAIRS_LEDS_MOTIONSENSORCONTROLLER_H
+#endif //STAIRS_LEDS_MOTIONSENSOR_H

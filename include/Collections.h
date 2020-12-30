@@ -1,10 +1,15 @@
-enum SensorState {
-    triggeredAState,
-    triggeredBState,
-    triggeredState,
-    activeState,
-    freedAState,
-    freedBState,
-    freedState,
-    idleState
+#ifndef COLLECTIONS_H
+#define COLLECTIONS_H
+
+enum ControllerState {
+    TRIGGERED_A_STATE,
+    TRIGGERED_B_STATE,
+    TRIGGERED_STATE,
+    ACTIVE_STATE,
+    FREED_A_STATE,
+    FREED_B_STATE,
+    FREED_STATE,
+    IDLE_STATE
 };
+
+#endif //COLLECTIONS_H

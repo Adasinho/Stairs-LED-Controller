@@ -67,6 +67,33 @@ bool Animation::outroFromAToBFrame() {
     }
 }
 
+bool Animation::outro() {
+    this->pixels->setPixelColor(iteratorA, this->pixels->Color(0, 0, 0));
+    this->pixels->setPixelColor(iteratorB, this->pixels->Color(0, 0, 0));
+    this->pixels->show();
+
+    bool iteratorAFinish = false;
+    bool iteratorBFinish = false;
+
+    if(iteratorB - 1 < numPixels) {
+        //iteratorA = 0; // fix for improve speed
+        iteratorB++;
+    } else {
+        iteratorB = numPixels - 1;
+        iteratorBFinish = true;
+    }
+
+    if(iteratorA - 1 >= 0) {
+        iteratorA--;
+        //iteratorB = this->numPixels - 1; // fix for improve speed
+    } else {
+        iteratorA = 0;
+        iteratorAFinish = true;
+    }
+
+    return iteratorAFinish && iteratorBFinish;
+}
+
 bool Animation::introBetweenFrame(uint8_t color) {
     this->pixels->setPixelColor(iteratorA, this->pixels->Color(color, color, color));
     this->pixels->setPixelColor(iteratorB, this->pixels->Color(color, color, color));

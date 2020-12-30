@@ -1,81 +1,76 @@
 #include "AnimationController.h"
+#include "MotionSensorController.h"
+#include "TacticSwitchController.h"
+#include "ClassicSwitchController.h"
 
-AnimationController::AnimationController(int numPixels, int ledStripPin, int sensorAPin, int sensorBPin, int delayValue) {
+template <typename ControlerType>
+AnimationController<ControlerType>::AnimationController(int numPixels, int ledStripPin, int sensorAPin, int sensorBPin, int delayValue) {
     this->pixels = new Adafruit_NeoPixel(numPixels, ledStripPin, NEO_GRB + NEO_KHZ800);
     this->animation = new Animation(this->pixels);
-    this->motionSensorController = new MotionSensorController(sensorAPin, sensorBPin);
+    this->controller = new ControlerType(sensorAPin, sensorBPin);
     this->delayValue = delayValue;
     this->lastTime = millis();
 
     this->pixels->begin();
 }
 
-void AnimationController::update() {
-    motionSensorController->update();
+template <typename ControlerType>
+void AnimationController<ControlerType>::update() {
+    controller->update();
 
-    SensorState sensorState = motionSensorController->getState();
-
-    /*
-    if(motionSensorController->checkIfStateChanged()) {
-        switch(sensorState) {
-            case triggeredAState:
-                animation->resetIteratorB();
-                break;
-            case triggeredBState:
-                animation->resetIteratorA();
-                break;
-
-        }
-    }
-    */
+    ControllerState sensorState = controller->getState();
 
     if(checkTime()) {
         switch(sensorState) {
-            case triggeredAState:
-                if(animation->introFromAToBFrame(255)) motionSensorController->setState(activeState);
+            case TRIGGERED_A_STATE:
+                if(animation->introFromAToBFrame(255)) controller->setState(ACTIVE_STATE);
             break;
-            case triggeredBState:
-                if(animation->introFromBToAFrame(255)) motionSensorController->setState(activeState);
+            case TRIGGERED_B_STATE:
+                if(animation->introFromBToAFrame(255)) controller->setState(ACTIVE_STATE);
             break;
-            case triggeredState:
-                if(animation->introBetweenFrame(255)) motionSensorController->setState(activeState);
+            case TRIGGERED_STATE:
+                if(animation->introBetweenFrame(255)) controller->setState(ACTIVE_STATE);
             break;
-            case activeState:
+            case ACTIVE_STATE:
 
             break;
-            case freedAState:
-                if(animation->outroFromBToAFrame()) motionSensorController->setState(idleState);
+            case FREED_A_STATE:
+                if(animation->outroFromBToAFrame()) controller->setState(IDLE_STATE);
             break;
-            case freedBState:
-                if(animation->outroFromAToBFrame()) motionSensorController->setState(idleState);
+            case FREED_B_STATE:
+                if(animation->outroFromAToBFrame()) controller->setState(IDLE_STATE);
             break;
-
-            case idleState:
+            case FREED_STATE:
+                if(animation->outro()) controller->setState(IDLE_STATE);
+            case IDLE_STATE:
 
             break;
         }
     }
 
-    motionSensorController->updateStates();
+    controller->updateStates();
 }
 
-void AnimationController::triggeredAnimation() {
-    switch(motionSensorController->checkFromStartToEndDirection()) {
+template <typename ControlerType>
+void AnimationController<ControlerType>::triggeredAnimation() {
+    switch(controller->checkFromStartToEndDirection()) {
         case true:
             if(this->animation->fromToNextFrame(255))
-                this->motionSensorController->setState(activeState);
+                this->controller->setState(ACTIVE_STATE);
         break;
         case false:
             if(this->animation->toFromNextFrame(255))
-                this->motionSensorController->setState(activeState);
+                this->controller->setState(ACTIVE_STATE);
     }
 }
 
-void AnimationController::freedAnimation() {
+template <typename ControlerType>
+void AnimationController<ControlerType>::freedAnimation() {
 
 }
 
-bool AnimationController::checkTime() {
+template <typename ControlerType>
+bool AnimationController<ControlerType>::checkTime() {
     unsigned long actualTime = millis();
 
     if(actualTime > lastTime + delayValue) {
@@ -83,3 +78,7 @@ bool AnimationController::checkTime() {
         return true;
     } else return false;
 }
+
+template class AnimationController<MotionSensorController>;
+template class AnimationController<TacticSwitchController>;
+template class AnimationController<ClassicSwitchController>;
