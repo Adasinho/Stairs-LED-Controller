@@ -1,6 +1,6 @@
 #include "TacticSwitchController.h"
 
-TacticSwitchController::TacticSwitchController(uint8_t startPinNumber, uint8_t endPinNumber) : Control(startPinNumber, endPinNumber) {
+TacticSwitchController::TacticSwitchController() : Control() {
     switchA = new TacticSwitch();
     switchB = new TacticSwitch();
 }
@@ -10,9 +10,9 @@ TacticSwitchController::~TacticSwitchController() {
     delete switchB;
 }
 
-void TacticSwitchController::update() {
-    bool switchAValue = startPin->getValue();
-    bool switchBValue = endPin->getValue();
+void TacticSwitchController::update(bool stateA, bool stateB) {
+    bool switchAValue = stateA;
+    bool switchBValue = stateB;
 
     ControllerState lastState = state;
 

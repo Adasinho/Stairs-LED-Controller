@@ -1,16 +1,16 @@
-#include "Control.h"
-#include "StateController.h"
-
 #pragma once
 #ifndef STAIRSLEDS_CLASSICSWITCHCONTROLLER_H
 #define STAIRSLEDS_CLASSICSWITCHCONTROLLER_H
 
+#include "Control.h"
+#include "StateController.h"
+
 class ClassicSwitchController : public Control {
     public:
-    ClassicSwitchController(uint8_t startPinNumber, uint8_t endPinNumber);
+    ClassicSwitchController();
     ~ClassicSwitchController();
 
-    void update();
+    void update(bool stateA, bool stateB) override;
 
     private:
     StateController *switchA, *switchB;

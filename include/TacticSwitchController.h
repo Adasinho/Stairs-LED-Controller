@@ -3,10 +3,10 @@
 
 class TacticSwitchController : public Control {
     public:
-    TacticSwitchController(uint8_t startPinNumber, uint8_t endPinNumber);
+    TacticSwitchController();
     ~TacticSwitchController();
 
-    void update();
+    void update(bool stateA, bool stateB);
 
     private:
     TacticSwitch *switchA, *switchB;

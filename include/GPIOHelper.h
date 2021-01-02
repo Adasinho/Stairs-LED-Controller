@@ -1,7 +1,7 @@
-#include <Arduino.h>
-
 #ifndef GPIO_HELPER
 #define GPIO_HELPER
+
+#include <Arduino.h>
 
 class GPIOHelper {
     public:

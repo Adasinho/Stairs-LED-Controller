@@ -7,16 +7,18 @@ template <typename ControlerType>
 AnimationController<ControlerType>::AnimationController(int numPixels, int ledStripPin, int sensorAPin, int sensorBPin, int delayValue) {
     this->pixels = new Adafruit_NeoPixel(numPixels, ledStripPin, NEO_GRB + NEO_KHZ800);
     this->animation = new Animation(this->pixels);
-    this->controller = new ControlerType(sensorAPin, sensorBPin);
+    this->controller = new ControlerType();
     this->delayValue = delayValue;
     this->lastTime = millis();
+    this->startPin = new GPIOHelper(sensorAPin, INPUT);
+    this->endPin = new GPIOHelper(sensorBPin, INPUT);
 
     this->pixels->begin();
 }
 
 template <typename ControlerType>
 void AnimationController<ControlerType>::update() {
-    controller->update();
+    controller->update(startPin->getValue(), endPin->getValue());
 
     ControllerState sensorState = controller->getState();
 

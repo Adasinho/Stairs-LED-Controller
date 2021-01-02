@@ -1,6 +1,9 @@
-#include "Adafruit_NeoPixel.h"
+#ifndef ANIMATION_CONTROLLER
+#define ANIMATION_CONTROLLER
+
 #include "Animation.h"
 #include "Control.h"
+#include "GPIOHelper.h"
 
 template <typename ControlerType>
 class AnimationController {
@@ -17,4 +20,7 @@ class AnimationController {
     ControlerType *controller;
     uint8_t delayValue;
     unsigned long lastTime;
+    GPIOHelper *startPin, *endPin;
 };
+
+#endif

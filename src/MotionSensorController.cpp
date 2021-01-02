@@ -4,7 +4,7 @@
 
 #include "../include/MotionSensorController.h"
 
-MotionSensorController::MotionSensorController(uint8_t startPinNumber, uint8_t endPinNumber) : Control(startPinNumber, endPinNumber) {
+MotionSensorController::MotionSensorController() : Control() {
     sensorA = new StateController();
     sensorB = new StateController();
 }
@@ -14,9 +14,9 @@ MotionSensorController::~MotionSensorController() {
     delete sensorB;
 }
 
-void MotionSensorController::update() {
-    bool sensorAValue = startPin->getValue();
-    bool sensorBValue = endPin->getValue();
+void MotionSensorController::update(bool stateA, bool stateB) {
+    bool sensorAValue = stateA;
+    bool sensorBValue = stateB;
 
     ControllerState lastState = state;
 
