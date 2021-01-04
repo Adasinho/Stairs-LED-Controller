@@ -15,54 +15,64 @@ ClassicSwitchController::~ClassicSwitchController() {
 }
 
 void ClassicSwitchController::update(bool stateA, bool stateB) {
-    bool switchAValue = stateA;
-    bool switchBValue = stateB;
-
     ControllerState lastState = state;
 
-    switchA->update(switchAValue);
-    switchB->update(switchBValue);
-    
-    bool switchAChanged = switchA->checkIfTriggered() || switchA->checkIfFreed();
-    bool switchBChanged = switchB->checkIfTriggered() || switchB->checkIfFreed();
+    switchA->update(stateA);
+    switchB->update(stateB);
 
-    if(switchAChanged) {
-        stateSwitchA = !stateSwitchA;
+    bool switchATriggered = switchA->checkIfTriggered();
+    bool switchBTriggered = switchB->checkIfTriggered();
+    bool switchAFreed = switchA->checkIfFreed();
+    bool switchBFreed = switchB->checkIfFreed();
 
-        if(active) {
-            freed = true;
-            if(stateSwitchB) state = FREED_B_STATE;
-            else if(lastState == ACTIVE_STATE) state = FREED_A_STATE;
-            else state = FREED_STATE;
-            active = false;
-        } else {
-            if(!triggered) {
-                fromStartToEndAnimation = true;
-                triggered = true;
-                if(stateSwitchB) state = TRIGGERED_B_STATE;
-                else state = TRIGGERED_A_STATE;
-                active = true;
-            }
-        }
-    }
+    bool switchAChanged = switchATriggered || switchAFreed;
+    bool switchBChanged = switchBTriggered || switchBFreed;
 
-    if(switchBChanged) {
-        stateSwitchB = !stateSwitchB;
-
-        if(active) {
-            freed = true;
-            if(stateSwitchA) state = FREED_A_STATE;
-            else if(lastState == ACTIVE_STATE) state = FREED_B_STATE;
-            else state = FREED_STATE;
-            active = false;
-        } else {
-            if(!triggered) {
-                fromStartToEndAnimation = false;
-                triggered = true;
-                if(stateSwitchA) state = TRIGGERED_A_STATE;
-                else state = TRIGGERED_B_STATE;
-                active = true;
-            }
+    if(switchAChanged || switchBChanged) {
+        switch(lastState) {
+            case IDLE_STATE:
+                state = !stateA && !stateB ? IDLE_STATE :
+                        switchATriggered ? TRIGGERED_A_STATE :
+                        switchBTriggered ? TRIGGERED_B_STATE :
+                        switchAFreed ? TRIGGERED_A_STATE :
+                        switchBFreed ? TRIGGERED_B_STATE :
+                        IDLE_STATE;
+            break;
+            case TRIGGERED_A_STATE:
+                state = switchATriggered || switchAFreed ? FREED_A_STATE :
+                        switchBTriggered || switchBFreed ? FREED_FROM_A_TO_B_STATE :
+                        IDLE_STATE;
+            break;
+            case TRIGGERED_B_STATE:
+                state = switchAFreed || switchATriggered ? FREED_FROM_B_TO_A_STATE :
+                        switchBFreed || switchBTriggered ? FREED_B_STATE :
+                        IDLE_STATE;
+            break;
+            case FREED_A_STATE:
+                state = switchATriggered ? TRIGGERED_A_STATE :
+                        switchBTriggered ? TRIGGERED_FROM_B_TO_A_STATE :
+                        ACTIVE_STATE;
+            break;
+            case FREED_B_STATE:
+                state = switchBTriggered ? TRIGGERED_B_STATE :
+                        switchATriggered ? TRIGGERED_FROM_A_TO_B_STATE :
+                        ACTIVE_STATE;
+            break;
+            case TRIGGERED_FROM_A_TO_B_STATE:
+            break;
+            case TRIGGERED_FROM_B_TO_A_STATE:
+            break;
+            case FREED_FROM_A_TO_B_STATE:
+            break;
+            case FREED_FROM_B_TO_A_STATE:
+            break;
+            case ACTIVE_STATE:
+                state = switchAFreed ? FREED_A_STATE :
+                        switchBFreed ? FREED_B_STATE :
+                        switchATriggered ? FREED_A_STATE :
+                        switchBTriggered ? FREED_B_STATE :
+                        ACTIVE_STATE;
+            break;
         }
     }
 

@@ -14,6 +14,7 @@ AnimationController<ControlerType>::AnimationController(int numPixels, int ledSt
     this->endPin = new GPIOHelper(sensorBPin, INPUT);
 
     this->pixels->begin();
+    this->pixels->setBrightness(64);
 }
 
 template <typename ControlerType>
@@ -33,8 +34,14 @@ void AnimationController<ControlerType>::update() {
             case TRIGGERED_STATE:
                 if(animation->introBetweenFrame(255)) controller->setState(ACTIVE_STATE);
             break;
+            case TRIGGERED_FROM_A_TO_B_STATE:
+                if(animation->introSnakeFromAToBFrame(255)) controller->setState(ACTIVE_STATE);
+            break;
+            case TRIGGERED_FROM_B_TO_A_STATE:
+                if(animation->introSnakeFromBToAFrame(255)) controller->setState(ACTIVE_STATE);
+            break;
             case ACTIVE_STATE:
-
+                animation->activeFrame();
             break;
             case FREED_A_STATE:
                 if(animation->outroFromBToAFrame()) controller->setState(IDLE_STATE);
@@ -42,10 +49,17 @@ void AnimationController<ControlerType>::update() {
             case FREED_B_STATE:
                 if(animation->outroFromAToBFrame()) controller->setState(IDLE_STATE);
             break;
+            case FREED_FROM_A_TO_B_STATE:
+                if(animation->outroSnakeFromAToBFrame(255)) controller->setState(IDLE_STATE);
+            break;
+            case FREED_FROM_B_TO_A_STATE:
+                if(animation->outroSnakeFromBToAFrame(255)) controller->setState(IDLE_STATE);
+            break;
             case FREED_STATE:
                 if(animation->outro()) controller->setState(IDLE_STATE);
+            break;
             case IDLE_STATE:
-
+                animation->idleFrame();
             break;
         }
     }

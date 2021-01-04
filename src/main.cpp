@@ -4,6 +4,8 @@
 #include "MotionSensorController.h"
 #include "ClassicSwitchController.h"
 
+#include <ESP8266WiFi.h>
+
 #ifdef __AVR__
     #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
@@ -23,6 +25,8 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.write("Setup");
+
+  WiFi.mode(WIFI_OFF);
 }
 
 void loop() {
