@@ -21,9 +21,9 @@ template <typename ControlerType>
 void AnimationController<ControlerType>::update() {
     controller->update(startPin->getValue(), endPin->getValue());
 
-    ControllerState sensorState = controller->getState();
-
     if(checkTime()) {
+        ControllerState sensorState = controller->getState();
+
         switch(sensorState) {
             case TRIGGERED_A_STATE:
                 if(animation->introFromAToBFrame(255)) controller->setState(ACTIVE_STATE);

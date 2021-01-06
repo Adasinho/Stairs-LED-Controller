@@ -7,10 +7,12 @@
 
 #include "Adafruit_NeoPixel.h"
 #include "Collections.h"
+#include "SnakeManager.h"
 
 class Animation {
 public:
     Animation(Adafruit_NeoPixel *pixels);
+    ~Animation();
     bool fromToNextFrame(uint8_t color);
     bool toFromNextFrame(uint8_t color);
     bool introFromAToBFrame(uint8_t color);
@@ -32,10 +34,11 @@ private:
     void updateState(ControllerState actualState);
 
     int numPixels;
-    int iteratorA, iteratorB;
     bool iteratorsInMove;
+    Iterators *iterators;
     ControllerState state;
     Adafruit_NeoPixel *pixels;
+    SnakeManager *snakeManager;
 };
 
 

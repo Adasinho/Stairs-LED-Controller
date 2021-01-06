@@ -2,6 +2,13 @@
     "files.associations": {
         "chrono": "cpp",
         "ratio": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "algorithm": "cpp",
+        "numeric": "cpp"
     }
 }

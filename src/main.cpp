@@ -17,7 +17,7 @@
 #define NUMPIXELS 60 // Popular NeoPixel ring size
 
 #define SENSOR_A_PIN 13
-#define SENSOR_B_PIN 15
+#define SENSOR_B_PIN 14
 
 AnimationController<ClassicSwitchController> animationController(NUMPIXELS, PIN, SENSOR_A_PIN, SENSOR_B_PIN, 35);
 

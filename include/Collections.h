@@ -16,4 +16,9 @@ enum ControllerState {
     IDLE_STATE
 };
 
+enum AnimationDirection {
+    FROM_A_TO_B,
+    FROM_B_TO_A
+};
+
 #endif //COLLECTIONS_H

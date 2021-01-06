@@ -49,22 +49,34 @@ void ClassicSwitchController::update(bool stateA, bool stateB) {
                         IDLE_STATE;
             break;
             case FREED_A_STATE:
-                state = switchATriggered ? TRIGGERED_A_STATE :
-                        switchBTriggered ? TRIGGERED_FROM_B_TO_A_STATE :
+                state = switchATriggered || switchAFreed ? TRIGGERED_A_STATE :
+                        switchBTriggered || switchBFreed ? TRIGGERED_FROM_B_TO_A_STATE :
                         ACTIVE_STATE;
             break;
             case FREED_B_STATE:
-                state = switchBTriggered ? TRIGGERED_B_STATE :
-                        switchATriggered ? TRIGGERED_FROM_A_TO_B_STATE :
+                state = switchATriggered || switchAFreed ? TRIGGERED_FROM_A_TO_B_STATE :
+                        switchBTriggered || switchBFreed ? TRIGGERED_B_STATE :
                         ACTIVE_STATE;
             break;
             case TRIGGERED_FROM_A_TO_B_STATE:
+                state = switchATriggered || switchAFreed ? FREED_STATE :
+                        switchBTriggered || switchBFreed ? FREED_FROM_A_TO_B_STATE :
+                        IDLE_STATE;
             break;
             case TRIGGERED_FROM_B_TO_A_STATE:
+                state = switchATriggered || switchAFreed ? FREED_FROM_B_TO_A_STATE :
+                        switchBTriggered || switchBFreed ? FREED_STATE :
+                        IDLE_STATE;
             break;
             case FREED_FROM_A_TO_B_STATE:
+                state = switchATriggered || switchAFreed ? TRIGGERED_A_STATE :
+                        switchBTriggered || switchBFreed ? TRIGGERED_B_STATE :
+                        ACTIVE_STATE;
             break;
             case FREED_FROM_B_TO_A_STATE:
+                state = switchATriggered || switchAFreed ? TRIGGERED_A_STATE :
+                        switchBTriggered || switchBFreed ? TRIGGERED_B_STATE :
+                        ACTIVE_STATE;
             break;
             case ACTIVE_STATE:
                 state = switchAFreed ? FREED_A_STATE :
@@ -72,6 +84,12 @@ void ClassicSwitchController::update(bool stateA, bool stateB) {
                         switchATriggered ? FREED_A_STATE :
                         switchBTriggered ? FREED_B_STATE :
                         ACTIVE_STATE;
+            break;
+            case TRIGGERED_STATE:
+                state = FREED_STATE;
+            break;
+            case FREED_STATE:
+                state = TRIGGERED_STATE;
             break;
         }
     }
